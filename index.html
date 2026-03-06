@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fidhul Krishna — IoT Developer & Device Engineer</title>
+    <meta name="description"
+        content="Portfolio of Fidhul Krishna — IoT Developer, Device Engineer, Vibe Coder, and Founder of Zorift. Explore cutting-edge projects built with ESP32, Arduino, and Python.">
+    <meta name="keywords" content="Fidhul Krishna, IoT, ESP32, Arduino, Developer, Device Engineer, Zorift, Portfolio">
+    <meta name="author" content="Fidhul Krishna">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ===== NOISE OVERLAY ===== -->
+    <div class="noise-overlay"></div>
+
+    <!-- ===== PARTICLE CANVAS ===== -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- ===== NAVIGATION ===== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-bracket">&lt;</span>FK<span class="logo-bracket">/&gt;</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#achievements" class="nav-link">Achievements</a></li>
+                <li><a href="#ventures" class="nav-link">Ventures</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="hero">
+        <div class="hero-bg-image"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-avatar-wrap">
+                <div class="avatar-ring"></div>
+                <img src="avatar.png" alt="Fidhul Krishna" class="hero-avatar">
+            </div>
+            <div class="hero-text">
+                <p class="hero-greeting">
+                    <span class="greeting-line"></span>
+                    <span class="typewriter" id="heroGreeting"></span>
+                </p>
+                <h1 class="hero-name">
+                    <span class="name-first">Fidhul</span>
+                    <span class="name-last">Krishna</span>
+                </h1>
+                <div class="hero-titles">
+                    <span class="title-badge"><i class="fas fa-microchip"></i> IoT Developer</span>
+                    <span class="title-badge"><i class="fas fa-cogs"></i> Device Engineer</span>
+                    <span class="title-badge"><i class="fas fa-code"></i> Vibe Coder</span>
+                    <span class="title-badge"><i class="fas fa-rocket"></i> Founder @ Zorift</span>
+                </div>
+                <p class="hero-tagline">Building the future with <span class="neon-text">ESP32</span>, one project at a
+                    time.</p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">
+                        <span>View Projects</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="#contact" class="btn btn-glass">
+                        <span>Get in Touch</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="mouse-wheel"></div>
+            </div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- ===== ABOUT SECTION ===== -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-user"></i> About Me</span>
+                <h2 class="section-title">The <span class="neon-text">Mind</span> Behind the Machine</h2>
+            </div>
+            <div class="about-grid">
+                <div class="about-card glass-card">
+                    <div class="about-icon"><i class="fas fa-bolt"></i></div>
+                    <p>I'm <strong>Fidhul Krishna</strong>, a KPESH student with a passion for turning wild ideas into
+                        real-world devices. I live and breathe <strong>IoT</strong> — from wiring up ESP32 boards to
+                        coding Python scripts that make laptops respond to hand gestures like Iron Man.</p>
+                    <p>I'm a <strong>device engineer</strong> who builds from scratch. Give me an Arduino, a
+                        microcontroller, or even just a mobile phone, and I'll turn it into something extraordinary. I
+                        believe in learning by doing — and then teaching others what I've learned.</p>
+                </div>
+                <div class="about-card glass-card">
+                    <div class="about-icon"><i class="fas fa-fire"></i></div>
+                    <p>When I'm not soldering circuits or deploying code, I'm exploring <strong>video editing</strong>,
+                        experimenting with <strong>music production on BandLab</strong>, or brainstorming the next big
+                        product at <strong>Zorift</strong> — the startup I co-founded.</p>
+                    <p>I document my journey on <strong>YouTube</strong> at <a
+                            href="https://youtube.com/@fidhul_offcial" target="_blank" class="inline-link">Fidhul
+                            Official</a>, where I share how I build things from scrap and turn them into working tech.
+                        Every project is a story of curiosity, grit, and a bit of controlled chaos.</p>
+                </div>
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item reveal">
+                    <span class="stat-number" data-count="7">0</span>
+                    <span class="stat-label">Projects</span>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-number" data-count="3">0</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-number">🏆</span>
+                    <span class="stat-label">1st Prize</span>
+                </div>
+                <div class="stat-item reveal">
+                    <span class="stat-number" data-count="1">0</span>
+                    <span class="stat-label">Startup</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SKILLS SECTION ===== -->
+    <section class="section section-dark" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-layer-group"></i> Tech Stack</span>
+                <h2 class="section-title">My <span class="neon-text">Arsenal</span></h2>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-card glass-card" data-tilt>
+                    <div class="skill-icon"><i class="fas fa-microchip"></i></div>
+                    <h3>ESP32 & IoT</h3>
+                    <p>My weapon of choice. Building connected devices, sensor networks, and smart systems with ESP32
+                        boards.</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-level="95"></div>
+                    </div>
+                </div>
+                <div class="skill-card glass-card" data-tilt>
+                    <div class="skill-icon"><i class="fab fa-python"></i></div>
+                    <h3>Python</h3>
+                    <p>Hand gesture recognition, computer vision, automation scripts, and AI-powered prediction systems.
+                    </p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-level="85"></div>
+                    </div>
+                </div>
+                <div class="skill-card glass-card" data-tilt>
+                    <div class="skill-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Arduino & Hardware</h3>
+                    <p>Circuit design, sensor integration, motor control, and building autonomous devices from scratch.
+                    </p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-level="90"></div>
+                    </div>
+                </div>
+                <div class="skill-card glass-card" data-tilt>
+                    <div class="skill-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Device Engineering</h3>
+                    <p>Repurposing mobile phones, building custom devices, and hardware hacking at its finest.</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-level="88"></div>
+                    </div>
+                </div>
+                <div class="skill-card glass-card" data-tilt>
+                    <div class="skill-icon"><i class="fas fa-code"></i></div>
+                    <h3>Vibe Coding</h3>
+                    <p>Flow-state programming — building software that just works, with intuition-driven development.
+                    </p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-level="80"></div>
+                    </div>
+                </div>
+                <div class="skill-card glass-card" data-tilt>
+                    <div class="skill-icon"><i class="fas fa-video"></i></div>
+                    <h3>Editing & Music</h3>
+                    <p>Video editing for YouTube content and music creation experiments on BandLab.</p>
+                    <div class="skill-bar">
+                        <div class="skill-fill" data-level="65"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== PROJECTS SECTION ===== -->
+    <section class="section" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-terminal"></i> Projects</span>
+                <h2 class="section-title">What I've <span class="neon-text">Built</span></h2>
+            </div>
+
+            <!-- Project Filter -->
+            <div class="project-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+                <button class="filter-btn" data-filter="in-progress">In Progress</button>
+                <button class="filter-btn" data-filter="concept">Concept</button>
+            </div>
+
+            <div class="projects-grid">
+
+                <!-- Project 1: Pharmacy Robot -->
+                <div class="project-card glass-card" data-category="concept">
+                    <div class="project-status status-concept">Concept</div>
+                    <div class="project-icon"><i class="fas fa-pills"></i></div>
+                    <h3>Automated Pharmacy Robot</h3>
+                    <p>A precision robot that dispenses and handles medicine automatically — eliminating human error
+                        from the pharmaceutical process. Built to ensure safe, accurate, and efficient medication
+                        management.</p>
+                    <div class="project-tags">
+                        <span>ESP32</span><span>Robotics</span><span>Automation</span>
+                    </div>
+                </div>
+
+                <!-- Project 2: Mobile Home Lab -->
+                <div class="project-card glass-card" data-category="completed">
+                    <div class="project-status status-completed">Completed</div>
+                    <div class="project-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>Mobile Phone Home Lab</h3>
+                    <p>Transformed a regular mobile phone into a fully functional home laboratory — proving that
+                        powerful tech experiments don't need expensive equipment.</p>
+                    <div class="project-tags">
+                        <span>Android</span><span>Networking</span><span>Server</span>
+                    </div>
+                    <a href="https://github.com/FIDHULoffcial" target="_blank" class="btn btn-small btn-glass"
+                        style="margin-top:14px;"><i class="fab fa-github"></i> View on GitHub</a>
+                </div>
+
+                <!-- Project 3: Iron Man Hand Gesture -->
+                <div class="project-card glass-card" data-category="completed">
+                    <div class="project-status status-completed">Completed</div>
+                    <div class="project-icon"><i class="fas fa-hand-sparkles"></i></div>
+                    <h3>Iron Man Hand Gesture Control</h3>
+                    <p>Use your bare hands as a mouse! A Python-powered computer vision system that tracks hand
+                        movements and gestures to control your laptop — just like Tony Stark.</p>
+                    <div class="project-tags">
+                        <span>Python</span><span>OpenCV</span><span>MediaPipe</span>
+                    </div>
+                    <a href="https://github.com/FIDHULoffcial" target="_blank" class="btn btn-small btn-glass"
+                        style="margin-top:14px;"><i class="fab fa-github"></i> View on GitHub</a>
+                </div>
+
+                <!-- Project 4: Mini Desktop Robot -->
+                <div class="project-card glass-card" data-category="in-progress">
+                    <div class="project-status status-progress">In Progress</div>
+                    <div class="project-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Mini Desktop Robot</h3>
+                    <p>A compact, custom-built desktop robot — small enough to fit on your desk but smart enough
+                        to handle real tasks autonomously. Currently under development.</p>
+                    <div class="project-tags">
+                        <span>Hardware</span><span>Robotics</span><span>ESP32</span>
+                    </div>
+                </div>
+
+                <!-- Project 5: Smart Farming System -->
+                <div class="project-card glass-card" data-category="concept">
+                    <div class="project-status status-concept">Concept</div>
+                    <div class="project-icon"><i class="fas fa-seedling"></i></div>
+                    <h3>Automated Smart Farming System</h3>
+                    <p>An IoT ecosystem that connects multiple boards into one unified brain for automated garden
+                        management. Multiple computers working in harmony to monitor, water, and nurture crops
+                        intelligently.</p>
+                    <div class="project-tags">
+                        <span>IoT</span><span>Multi-Board</span><span>Agriculture</span>
+                    </div>
+                </div>
+
+                <!-- Project 6: Disaster Prediction -->
+                <div class="project-card glass-card" data-category="completed">
+                    <div class="project-status status-completed">Completed</div>
+                    <div class="project-icon"><i class="fas fa-mountain"></i></div>
+                    <h3>Landslide & Earthquake Predictor</h3>
+                    <p>A self-sustaining weather satellite-like device that senses water levels, soil moisture, and
+                        temperature to predict landslides and earthquakes. Solar-powered with WiFi notifications to
+                        mobile phones.</p>
+                    <div class="project-tags">
+                        <span>IoT</span><span>Sensors</span><span>Solar</span><span>AI</span>
+                    </div>
+                </div>
+
+                <!-- Project 7: Pip-Boy Device -->
+                <div class="project-card glass-card" data-category="concept">
+                    <div class="project-status status-concept">Concept</div>
+                    <div class="project-icon"><i class="fas fa-wristwatch"></i></div>
+                    <h3>Multitasking Developer Device</h3>
+                    <p>A Pip-Boy inspired wearable device for developers. Imagine a wrist-mounted multitasking hub that
+                        gives you real-time data, controls, and notifications — right on your arm.</p>
+                    <div class="project-tags">
+                        <span>Wearable</span><span>ESP32</span><span>Hardware</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ACHIEVEMENTS SECTION ===== -->
+    <section class="section section-dark" id="achievements">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-trophy"></i> Achievements</span>
+                <h2 class="section-title">Milestones <span class="neon-text">Unlocked</span></h2>
+            </div>
+            <div class="achievements-grid">
+                <div class="achievement-card glass-card featured">
+                    <div class="achievement-badge">🏆</div>
+                    <h3>Sparkathon 25 — 1st Prize</h3>
+                    <p>Won first place at Sparkathon for innovation in technology. Recognized for curiosity, effort, and
+                        passion for innovation by the panel of judges.</p>
+                    <div class="certificate-frame">
+                        <img src="assets/sparkathon-cert.png" alt="Sparkathon 25 Certificate" class="certificate-img"
+                            loading="lazy">
+                    </div>
+                </div>
+                <div class="achievement-card glass-card">
+                    <div class="achievement-badge">🔬</div>
+                    <h3>Science Fair Exhibitions</h3>
+                    <p>Participated in multiple science fairs and exhibitions, showcasing IoT projects and hardware
+                        innovations. Left a strong impression on judges and audiences alike.</p>
+                </div>
+                <div class="achievement-card glass-card">
+                    <div class="achievement-badge">📺</div>
+                    <h3>YouTube — Fidhul Official</h3>
+                    <p>Running a YouTube channel documenting the journey of building tech projects from scratch. Sharing
+                        knowledge and inspiring the next generation of makers.</p>
+                    <a href="https://youtube.com/@fidhul_offcial" target="_blank" class="btn btn-small btn-glass">
+                        <i class="fab fa-youtube"></i> Watch Channel
+                    </a>
+                </div>
+                <div class="achievement-card glass-card">
+                    <div class="achievement-badge">🎓</div>
+                    <h3>Teaching & Mentoring</h3>
+                    <p>Starting to take classes and teach students alongside Yadhushnav — sharing practical knowledge in
+                        IoT, programming, and device engineering.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== VENTURES SECTION ===== -->
+    <section class="section" id="ventures">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-building"></i> Ventures</span>
+                <h2 class="section-title">Beyond <span class="neon-text">Code</span></h2>
+            </div>
+            <div class="ventures-grid">
+                <div class="venture-card glass-card">
+                    <div class="venture-logo">
+                        <span class="venture-logo-text">ZORIFT</span>
+                    </div>
+                    <div class="venture-info">
+                        <span class="venture-role">Founder</span>
+                        <h3>Zorift</h3>
+                        <p>A startup building innovative solutions — co-founded with my friend
+                            <strong>Yadhushnav</strong>. We're turning ideas into products, one sprint at a time.
+                            Currently in the building phase and assembling a passionate team.
+                        </p>
+                        <div class="venture-footer">
+                            <span class="venture-status"><i class="fas fa-circle"></i> Active — Building Phase</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CONTACT SECTION ===== -->
+    <section class="section section-dark" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fas fa-satellite-dish"></i> Contact</span>
+                <h2 class="section-title">Let's <span class="neon-text">Connect</span></h2>
+                <p class="section-subtitle">Got an idea? Want to collaborate? Or just talk tech? Reach out through any
+                    of these channels.</p>
+            </div>
+            <div class="contact-grid">
+                <a href="mailto:fidhul1krishna@gmail.com" class="contact-card glass-card" id="contact-email">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <h3>Email</h3>
+                    <p>fidhul1krishna@gmail.com</p>
+                </a>
+                <a href="https://github.com/FIDHULoffcial" target="_blank" class="contact-card glass-card"
+                    id="contact-github">
+                    <div class="contact-icon"><i class="fab fa-github"></i></div>
+                    <h3>GitHub</h3>
+                    <p>FIDHULoffcial</p>
+                </a>
+                <a href="https://www.instagram.com/FIDHUL_KRISHNA/" target="_blank" class="contact-card glass-card"
+                    id="contact-instagram">
+                    <div class="contact-icon"><i class="fab fa-instagram"></i></div>
+                    <h3>Instagram</h3>
+                    <p>FIDHUL_KRISHNA</p>
+                </a>
+                <a href="https://linkedin.com/in/fidhul-krishna" target="_blank" class="contact-card glass-card"
+                    id="contact-linkedin">
+                    <div class="contact-icon"><i class="fab fa-linkedin"></i></div>
+                    <h3>LinkedIn</h3>
+                    <p>in/fidhul-krishna</p>
+                </a>
+                <a href="https://youtube.com/@fidhul_offcial" target="_blank" class="contact-card glass-card"
+                    id="contact-youtube">
+                    <div class="contact-icon"><i class="fab fa-youtube"></i></div>
+                    <h3>YouTube</h3>
+                    <p>Fidhul Official</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-bracket">&lt;</span>FK<span class="logo-bracket">/&gt;</span>
+                </div>
+                <p class="footer-text">Designed & Built by <strong>Fidhul Krishna</strong></p>
+                <div class="footer-socials">
+                    <a href="https://github.com/FIDHULoffcial" target="_blank" aria-label="GitHub"><i
+                            class="fab fa-github"></i></a>
+                    <a href="https://www.instagram.com/FIDHUL_KRISHNA/" target="_blank" aria-label="Instagram"><i
+                            class="fab fa-instagram"></i></a>
+                    <a href="https://linkedin.com/in/fidhul-krishna" target="_blank" aria-label="LinkedIn"><i
+                            class="fab fa-linkedin"></i></a>
+                    <a href="https://youtube.com/@fidhul_offcial" target="_blank" aria-label="YouTube"><i
+                            class="fab fa-youtube"></i></a>
+                </div>
+                <p class="footer-copy">&copy; 2026 Fidhul Krishna. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== CHATBOT WIDGET ===== -->
+    <div class="chatbot-widget" id="chatbot">
+        <button class="chatbot-toggle" id="chatbotToggle" aria-label="Open chat">
+            <i class="fas fa-robot"></i>
+        </button>
+        <div class="chatbot-panel" id="chatbotPanel">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <div class="chatbot-avatar"><i class="fas fa-robot"></i></div>
+                    <div>
+                        <h4>FK Assistant</h4>
+                        <span class="chatbot-status"><i class="fas fa-circle"></i> Online</span>
+                    </div>
+                </div>
+                <button class="chatbot-close" id="chatbotClose" aria-label="Close chat"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chat-msg bot">
+                    <div class="chat-bubble">Hey! 👋 I'm Fidhul's assistant. Ask me about his projects, skills, or how
+                        to get in touch!</div>
+                </div>
+            </div>
+            <div class="chatbot-input-area">
+                <input type="text" id="chatbotInput" placeholder="Type a message..." autocomplete="off">
+                <button id="chatbotSend" aria-label="Send"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
