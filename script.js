@@ -1,391 +1,424 @@
-/* ================================================
-   FIDHUL KRISHNA — PORTFOLIO JS
-   Particles, Scroll FX, Parallax & Interactivity
-   ================================================ */
+/* ================================================================
+   FIDHUL KRISHNA — script.js  (v3 — Unified)
+   All behavior wired to: sound.js (SE), GitHub API, YouTube link.
+   Section order: hero → about → timeline → skills → projects →
+                  achievements → ventures → github → content →
+                  social → contact
+   ================================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ===== TYPEWRITER =====
-    const greetEl = document.getElementById('heroGreeting');
-    const greetText = "Hello, I'm";
-    let charIndex = 0;
-    function typeWriter() {
-        if (charIndex < greetText.length) {
-            greetEl.textContent += greetText.charAt(charIndex);
-            charIndex++;
-            setTimeout(typeWriter, 80);
-        }
-    }
-    setTimeout(typeWriter, 600);
+    /* ── Social & API constants ──────────────────────────────────── */
+    const GH_USER = 'FIDHULoffcial';
+    const GH_API_USER = `https://api.github.com/users/${GH_USER}`;
+    const GH_API_REPOS = `https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=30`;
+    const GH_CACHE_KEY = 'fk_gh_repos_v1';
+    const GH_PROF_KEY = 'fk_gh_profile_v1';
+    const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
-    // ===== MOUSE TRACKING (for particles) =====
-    let mouseX = 0, mouseY = 0;
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
+    /* ── Language → GitHub official colour ──────────────────────── */
+    const LANG_COLORS = {
+        Python: '#3572A5', 'C++': '#f34b7d', C: '#555555',
+        JavaScript: '#f1e05a', HTML: '#e34c26', CSS: '#563d7c',
+        Shell: '#89e051', Makefile: '#427819', TypeScript: '#2b7489',
+    };
 
-    // ===== CHATBOT =====
-    const chatbotWidget = document.getElementById('chatbot');
-    const chatbotToggle = document.getElementById('chatbotToggle');
-    const chatbotClose = document.getElementById('chatbotClose');
-    const chatbotPanel = document.getElementById('chatbotPanel');
-    const chatbotMessages = document.getElementById('chatbotMessages');
-    const chatbotInput = document.getElementById('chatbotInput');
-    const chatbotSend = document.getElementById('chatbotSend');
+    /* ================================================================
+       0. AUDIO UNLOCK
+          Browser won't allow AudioContext before a user gesture.
+          We show a "TAP ANYWHERE FOR AUDIO" hint on the intro,
+          and start the BGM on the first touch/click.
+       ================================================================ */
+    let audioUnlocked = false;
+    const introTap = document.getElementById('introTap');
 
-    if (chatbotToggle) {
-        chatbotToggle.addEventListener('click', () => chatbotWidget.classList.add('open'));
-        chatbotClose.addEventListener('click', () => chatbotWidget.classList.remove('open'));
-
-        function addMessage(text, sender) {
-            const msg = document.createElement('div');
-            msg.className = `chat-msg ${sender}`;
-            msg.innerHTML = `<div class="chat-bubble">${text}</div>`;
-            chatbotMessages.appendChild(msg);
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-        }
-
-        function showTyping() {
-            const typing = document.createElement('div');
-            typing.className = 'chat-msg bot';
-            typing.id = 'typing-indicator';
-            typing.innerHTML = '<div class="chat-bubble" style="opacity:0.5">Typing...</div>';
-            chatbotMessages.appendChild(typing);
-            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-        }
-
-        function removeTyping() {
-            const t = document.getElementById('typing-indicator');
-            if (t) t.remove();
-        }
-
-        function getBotResponse(msg) {
-            const q = msg.toLowerCase();
-            if (q.includes('project') || q.includes('built') || q.includes('work'))
-                return "Fidhul has built amazing things! 🔥 His key projects include an Automated Pharmacy Robot, a Mobile Phone Home Lab, Iron Man Hand Gesture Control using Python + OpenCV, a Mini Desktop Robot, a Smart Farming System, and a Landslide & Earthquake Predictor. Check the Projects section for details!";
-            if (q.includes('skill') || q.includes('tech') || q.includes('stack') || q.includes('know'))
-                return "Fidhul's tech arsenal includes ESP32 & IoT, Python, Arduino & Hardware, Device Engineering, Vibe Coding, and Video Editing & Music production. He builds everything from scratch! 🛠️";
-            if (q.includes('contact') || q.includes('reach') || q.includes('email') || q.includes('mail'))
-                return "You can reach Fidhul at: 📧 fidhul1krishna@gmail.com, or connect on GitHub, Instagram, LinkedIn, and YouTube. Check the Contact section below!";
-            if (q.includes('github'))
-                return "Find Fidhul on GitHub: <a href='https://github.com/FIDHULoffcial' target='_blank' style='color:#e8912c'>github.com/FIDHULoffcial</a> 🚀";
-            if (q.includes('instagram') || q.includes('insta'))
-                return "Follow Fidhul on Instagram: <a href='https://www.instagram.com/FIDHUL_KRISHNA/' target='_blank' style='color:#e8912c'>@FIDHUL_KRISHNA</a> 📸";
-            if (q.includes('youtube') || q.includes('channel') || q.includes('video'))
-                return "Check out Fidhul's YouTube channel: <a href='https://youtube.com/@fidhul_offcial' target='_blank' style='color:#e8912c'>Fidhul Official</a> 🎬 — Tech, gaming, and innovation content!";
-            if (q.includes('esp32') || q.includes('iot') || q.includes('arduino'))
-                return "ESP32 is Fidhul's weapon of choice! He uses it for IoT projects, sensor networks, and smart systems. Combined with Arduino for circuit design and motor control. 🤖";
-            if (q.includes('iron man') || q.includes('gesture') || q.includes('hand'))
-                return "The Iron Man Hand Gesture Control system uses Python, OpenCV, and MediaPipe to turn your bare hand into a mouse — just like Tony Stark! 🦾";
-            if (q.includes('zorift') || q.includes('startup') || q.includes('venture') || q.includes('company'))
-                return "Fidhul founded Zorift — a tech startup building tools for creators, students, and indie developers. It's currently in the active building phase! 🚀";
-            if (q.includes('sparkathon') || q.includes('achievement') || q.includes('prize') || q.includes('award'))
-                return "Fidhul won 1st Prize at Sparkathon! 🏆 He's also participated in science fairs and tech exhibitions, impressing everyone with his innovative projects.";
-            if (q.includes('hello') || q.includes('hi') || q.includes('hey'))
-                return "Hey there! 👋 What would you like to know about Fidhul? I can tell you about his projects, skills, or how to get in touch!";
-            if (q.includes('who') || q.includes('about') || q.includes('fidhul'))
-                return "Fidhul Krishna is an IoT Developer, Device Engineer, Vibe Coder, and Founder of Zorift. He builds the future with ESP32, one project at a time. He's also a content creator on YouTube! ⚡";
-            if (q.includes('thank'))
-                return "You're welcome! 😊 Feel free to explore the portfolio and reach out anytime!";
-            return "Interesting! 🤔 Try asking about Fidhul's projects, skills, social links, Zorift, or achievements — I know all about them!";
-        }
-
-        function handleSend() {
-            const text = chatbotInput.value.trim();
-            if (!text) return;
-            addMessage(text, 'user');
-            chatbotInput.value = '';
-            showTyping();
-            setTimeout(() => {
-                removeTyping();
-                addMessage(getBotResponse(text), 'bot');
-            }, 600 + Math.random() * 400);
-        }
-
-        chatbotSend.addEventListener('click', handleSend);
-        chatbotInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSend(); });
+    function unlockAudio() {
+        if (audioUnlocked) return;
+        SE.unlock();
+        SE.introBGM();       // cinematic score starts on first touch
+        audioUnlocked = true;
+        if (introTap) introTap.classList.add('tapped');
     }
 
-    // ===== NAVBAR SCROLL =====
-    const navbar = document.getElementById('navbar');
-    const sections = document.querySelectorAll('.section, .hero');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-
-        // Navbar bg
-        navbar.classList.toggle('scrolled', scrollY > 60);
-
-        // Active section highlight
-        let current = '';
-        sections.forEach(section => {
-            const top = section.offsetTop - 120;
-            if (scrollY >= top) current = section.getAttribute('id');
-        });
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === '#' + current) {
-                link.classList.add('active');
-            }
-        });
-    });
-
-    // ===== MOBILE NAV TOGGLE =====
-    const navToggle = document.getElementById('navToggle');
-    const navLinksEl = document.getElementById('navLinks');
-
-    navToggle.addEventListener('click', () => {
-        navToggle.classList.toggle('active');
-        navLinksEl.classList.toggle('open');
-    });
-
-    navLinksEl.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            navToggle.classList.remove('active');
-            navLinksEl.classList.remove('open');
-        });
-    });
-
-    // ===== SCROLL REVEAL =====
-    const revealElements = document.querySelectorAll(
-        '.glass-card, .section-header, .project-filters, .scroll-indicator, .hero-content, .stat-item'
+    ['pointerdown', 'touchstart', 'keydown'].forEach(evt =>
+        document.addEventListener(evt, unlockAudio, { once: false, passive: true })
     );
-    revealElements.forEach((el, i) => {
-        el.classList.add('reveal');
-        const delayClass = `reveal-delay-${(i % 4) + 1}`;
-        el.classList.add(delayClass);
+
+    /* ================================================================
+       1. CINEMATIC INTRO  (visuals only at t=0, audio on first tap)
+       ================================================================ */
+    const intro = document.getElementById('intro');
+    const introFirst = document.getElementById('introFirst');
+    const introLast = document.getElementById('introLast');
+    const introRule = document.getElementById('introRule');
+    const introSub = document.getElementById('introSub');
+    const introDots = document.getElementById('introDots');
+
+    function runIntro() {
+        // Step 1 (0s)    — FIDHUL rises slowly from below (1.6s CSS transition)
+        setTimeout(() => introFirst.classList.add('show'), 0);
+
+        // Step 2 (1.0s)  — KRISHNA rises
+        setTimeout(() => introLast.classList.add('show'), 1000);
+
+        // Step 3 (2.5s)  — HR rule draws left-to-right
+        setTimeout(() => introRule.classList.add('show'), 2500);
+
+        // Step 4 (3.1s)  — Subtitle rises
+        setTimeout(() => introSub.classList.add('show'), 3100);
+
+        // Step 5         — Name holds on screen (dramatic pause)
+
+        // Step 6 (4.5s)  — Gold squares pulse in
+        setTimeout(() => introDots.classList.add('show'), 4500);
+
+        // Step 7 (5.0s)  — Fade out intro, reveal page
+        setTimeout(() => {
+            intro.classList.add('fade-out');
+            setTimeout(() => {
+                intro.classList.add('gone');
+                document.body.classList.add('ready');
+                // Kick off all IntersectionObservers
+                revealEls.forEach(el => revealObserver.observe(el));
+                statNumbers.forEach(el => counterObs.observe(el));
+            }, 1000);
+        }, 5000);
+    }
+
+    runIntro();
+
+    /* ================================================================
+       2. REVEAL OBSERVER  (fade-up on scroll)
+       ================================================================ */
+    const revealEls = document.querySelectorAll('.reveal');
+    let revealObserver;
+
+    // Stagger delay classes for grid children
+    [
+        '.about-grid', '.skills-groups', '.projects-grid',
+        '.achievements-grid', '.contact-grid', '.timeline-list',
+        '.gh-grid', '.yt-topic-grid', '.social-grid',
+    ].forEach(sel => {
+        const grid = document.querySelector(sel);
+        if (!grid) return;
+        [...grid.children].forEach((child, i) => {
+            if (child.classList.contains('reveal'))
+                child.classList.add(`reveal-d${(i % 4) + 1}`);
+        });
     });
-    // Hero content should be visible immediately
-    document.querySelector('.hero-content')?.classList.add('visible');
 
-    const revealObserver = new IntersectionObserver((entries) => {
+    let revealSoundThrottle = 0;
+
+    revealObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+            const now = Date.now();
+            if (now - revealSoundThrottle > 400) {
+                SE.revealPing();
+                revealSoundThrottle = now;
             }
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.10, rootMargin: '0px 0px -30px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    // Observers started after intro (step 7 above)
 
-    // ===== STAT COUNTER ANIMATION =====
+    /* ================================================================
+       3. COUNTER ANIMATION
+       ================================================================ */
     const statNumbers = document.querySelectorAll('.stat-number[data-count]');
-    const counterObserver = new IntersectionObserver((entries) => {
+
+    const counterObs = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const el = entry.target;
-                const target = parseInt(el.getAttribute('data-count'));
-                let current = 0;
-                const duration = 1500;
-                const step = Math.max(1, Math.floor(target / (duration / 30)));
-                const timer = setInterval(() => {
-                    current += step;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    el.textContent = current + '+';
-                }, 30);
-                counterObserver.unobserve(el);
-            }
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const target = parseInt(el.getAttribute('data-count'), 10);
+            let current = 0;
+            const step = Math.max(1, Math.ceil(target / 40));
+            const timer = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = current + (current >= target ? '+' : '');
+                if (current >= target) clearInterval(timer);
+            }, 28);
+            counterObs.unobserve(el);
         });
     }, { threshold: 0.5 });
-    statNumbers.forEach(num => counterObserver.observe(num));
 
-    // ===== SKILL BAR ANIMATION =====
-    const skillFills = document.querySelectorAll('.skill-fill');
-    const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const level = entry.target.getAttribute('data-level');
-                entry.target.style.width = level + '%';
-            }
-        });
-    }, { threshold: 0.5 });
-    skillFills.forEach(fill => skillObserver.observe(fill));
-
-    // ===== PROJECT FILTER =====
+    /* ================================================================
+       4. PROJECT FILTER
+       ================================================================ */
     const filterBtns = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
             const filter = btn.getAttribute('data-filter');
-            projectCards.forEach((card, i) => {
-                const category = card.getAttribute('data-category');
-                if (filter === 'all' || category === filter) {
-                    card.classList.remove('hidden');
-                    card.style.animation = `fadeInUp 0.5s ${i * 0.08}s ease both`;
-                } else {
-                    card.classList.add('hidden');
-                }
+            filterBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+            btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
+            projectCards.forEach(card => {
+                card.classList.toggle(
+                    'hidden',
+                    filter !== 'all' && card.getAttribute('data-category') !== filter
+                );
             });
+            SE.filterActivate();
         });
     });
 
-    // ===== HERO PARALLAX =====
-    const heroBg = document.querySelector('.hero-bg-image');
-    const heroOverlay = document.querySelector('.hero-overlay');
-    if (heroBg) {
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
-            heroBg.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
-            if (heroOverlay) {
-                heroOverlay.style.transform = `translate(${x * 0.5}px, ${y * 0.5}px)`;
-            }
+    /* ================================================================
+       5. NAVBAR — scroll shadow + active link highlight
+       ================================================================ */
+    const navbar = document.getElementById('navbar');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id], .hero[id]');
+
+    function onScroll() {
+        navbar.classList.toggle('scrolled', window.scrollY > 60);
+        let current = '';
+        sections.forEach(s => {
+            if (window.scrollY >= s.offsetTop - 140) current = s.id;
         });
+        navLinks.forEach(link =>
+            link.classList.toggle('active', link.getAttribute('href') === `#${current}`)
+        );
     }
 
-    // ===== MAGNETIC BUTTONS =====
-    document.querySelectorAll('.btn-primary, .btn-glass').forEach(btn => {
-        btn.addEventListener('mousemove', (e) => {
-            const rect = btn.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
-        });
-        btn.addEventListener('mouseleave', () => {
-            btn.style.transform = 'translate(0, 0)';
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    /* ================================================================
+       6. HAMBURGER + MOBILE OVERLAY
+       ================================================================ */
+    const hamburger = document.getElementById('navHamburger');
+    const overlay = document.getElementById('navOverlay');
+    const overlayClose = document.getElementById('navOverlayClose');
+    const overlayLinks = document.querySelectorAll('.nav-overlay-link');
+
+    function openMenu() {
+        overlay.classList.add('open');
+        hamburger.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        SE.btnClick();
+    }
+    function closeMenu() {
+        overlay.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        SE.navClick();
+    }
+
+    hamburger.addEventListener('click', () => overlay.classList.contains('open') ? closeMenu() : openMenu());
+    overlayClose.addEventListener('click', closeMenu);
+    overlayLinks.forEach(l => l.addEventListener('click', closeMenu));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+    /* ================================================================
+       7. SMOOTH SCROLL
+       ================================================================ */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', e => {
+            const href = anchor.getAttribute('href');
+            if (href === '#') return;
+            const target = document.querySelector(href);
+            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         });
     });
 
-    // ===== PARTICLE SYSTEM =====
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationId;
-    let hueShift = 0;
+    /* ================================================================
+       8. SOUND WIRING
+       ================================================================ */
+    navLinks.forEach(l => l.addEventListener('click', () => SE.navClick()));
+    document.querySelectorAll('.btn').forEach(b => b.addEventListener('click', () => SE.btnClick()));
+    document.querySelectorAll('.contact-card').forEach(c => c.addEventListener('click', () => SE.btnClick()));
+    document.querySelectorAll('.social-platform-card').forEach(c => c.addEventListener('click', () => SE.navClick()));
 
-    function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    let hoverThrottle = 0;
+    function onHover() {
+        const now = Date.now();
+        if (now - hoverThrottle > 120) { SE.hoverBlip(); hoverThrottle = now; }
     }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    document.querySelectorAll('.glass-card, .chip, .hero-pill').forEach(el =>
+        el.addEventListener('mouseenter', onHover)
+    );
 
-    class Particle {
-        constructor() {
-            this.reset();
-        }
-        reset() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2.5 + 1;
-            this.speedX = (Math.random() - 0.5) * 0.3;
-            this.speedY = (Math.random() - 0.5) * 0.3;
-            this.opacity = Math.random() * 0.4 + 0.25;
-            this.baseHue = Math.random() > 0.6 ? 25 : (Math.random() > 0.5 ? 12 : 35); // amber, orange-red, gold
-        }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
+    // Mute button
+    const muteBtn = document.getElementById('navSound');
+    const muteIcon = document.getElementById('soundIcon');
+    if (muteBtn) {
+        muteBtn.addEventListener('click', () => {
+            unlockAudio();
+            const isMuted = SE.toggle();
+            muteIcon.className = isMuted ? 'fas fa-volume-xmark' : 'fas fa-volume-up';
+            muteBtn.setAttribute('aria-label', isMuted ? 'Unmute sound' : 'Mute sound');
+            muteBtn.classList.toggle('muted', isMuted);
+        });
+    }
 
-            // Mouse interaction
-            const dx = this.x - mouseX;
-            const dy = this.y - mouseY;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 150) {
-                const force = (150 - dist) / 150;
-                this.x += dx * force * 0.02;
-                this.y += dy * force * 0.02;
+    /* ================================================================
+       9. GITHUB PROFILE FETCH
+          Fetches user profile → populates:
+            - sys.info avatar (#sysAvatar)
+            - sys.info repo count (#sysRepos)
+            - about stats followers (#ghFollowersStat)
+            - social card (#ghRepoCount, #ghFollowerCount)
+       ================================================================ */
+    async function fetchGitHubProfile() {
+        let profile = null;
+
+        // Try cache first
+        try {
+            const cached = localStorage.getItem(GH_PROF_KEY);
+            if (cached) {
+                const { timestamp, data } = JSON.parse(cached);
+                if (Date.now() - timestamp < CACHE_TTL) profile = data;
             }
+        } catch (_) { }
 
-            if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-            if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+        // Fetch from API if no cache
+        if (!profile) {
+            try {
+                const res = await fetch(GH_API_USER, {
+                    headers: { Accept: 'application/vnd.github+json' },
+                });
+                if (res.ok) {
+                    profile = await res.json();
+                    localStorage.setItem(GH_PROF_KEY, JSON.stringify({ timestamp: Date.now(), data: profile }));
+                }
+            } catch (_) { }
         }
-        draw() {
-            const hue = (this.baseHue + hueShift * 0.3) % 360;
-            ctx.save();
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = `hsla(${hue}, 90%, 55%, ${this.opacity * 0.6})`;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `hsla(${hue}, 90%, 60%, ${this.opacity})`;
-            ctx.fill();
-            ctx.restore();
+
+        if (!profile) return;
+
+        // ── Populate sys.info avatar ────────────────────────────────
+        const avatarWrap = document.getElementById('sysAvatar');
+        if (avatarWrap && profile.avatar_url) {
+            avatarWrap.innerHTML = `
+        <img class="sys-avatar"
+             src="${profile.avatar_url}"
+             alt="Fidhul Krishna — GitHub avatar"
+             loading="lazy">`;
         }
+
+        // ── Repo count in sys.info ──────────────────────────────────
+        const sysRepos = document.getElementById('sysRepos');
+        if (sysRepos) sysRepos.textContent = profile.public_repos || '—';
+
+        // ── Followers in about stats ────────────────────────────────
+        const followersStat = document.getElementById('ghFollowersStat');
+        if (followersStat) {
+            followersStat.textContent = profile.followers || '—';
+            followersStat.removeAttribute('data-count'); // prevent counter override
+        }
+
+        // ── Social card stats ───────────────────────────────────────
+        const ghRepoCount = document.getElementById('ghRepoCount');
+        const ghFollowerCount = document.getElementById('ghFollowerCount');
+        if (ghRepoCount) ghRepoCount.textContent = profile.public_repos || '—';
+        if (ghFollowerCount) ghFollowerCount.textContent = profile.followers || '—';
     }
 
-    // Initialize particles
-    const particleCount = Math.min(80, Math.floor(window.innerWidth / 15));
-    for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
+    fetchGitHubProfile();
+
+    /* ================================================================
+       10. GITHUB REPOS FETCH
+           Fetches public repos → renders cards in #ghGrid.
+           24h localStorage cache. Auto-refreshes on next visit.
+       ================================================================ */
+    const ghGrid = document.getElementById('ghGrid');
+    const ghStatus = document.getElementById('ghStatusText');
+    const ghCacheTime = document.getElementById('ghCacheTime');
+    const ghDot = document.getElementById('ghDot');
+
+    function relTime(dateStr) {
+        const days = Math.floor((Date.now() - new Date(dateStr)) / 86400000);
+        if (days === 0) return 'today';
+        if (days === 1) return '1d ago';
+        if (days < 30) return `${days}d ago`;
+        if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+        return `${Math.floor(days / 365)}y ago`;
     }
 
-    function drawConnections() {
-        for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-                const dx = particles[i].x - particles[j].x;
-                const dy = particles[i].y - particles[j].y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                if (dist < 120) {
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(particles[j].x, particles[j].y);
-                    const opacity = (1 - dist / 120) * 0.18;
-                    const hue = (25 + hueShift * 0.3) % 360;
-                    ctx.strokeStyle = `hsla(${hue}, 80%, 50%, ${opacity})`;
-                    ctx.lineWidth = 0.6;
-                    ctx.stroke();
+    function buildRepoCard(repo) {
+        const color = LANG_COLORS[repo.language] || 'rgba(244,240,232,0.25)';
+        const card = document.createElement('a');
+        card.className = 'glass-card gh-card reveal';
+        card.href = repo.html_url;
+        card.target = '_blank';
+        card.rel = 'noopener';
+        card.setAttribute('aria-label', `Repo: ${repo.name}`);
+        card.innerHTML = `
+      <div class="gh-card-top">
+        <i class="fab fa-github gh-card-icon" aria-hidden="true"></i>
+        <span class="gh-repo-name">${repo.name}</span>
+      </div>
+      <p class="gh-repo-desc">${repo.description || 'No description provided.'}</p>
+      <div class="gh-card-footer">
+        ${repo.language ? `<span class="gh-lang"><span class="gh-lang-dot" style="background:${color}"></span>${repo.language}</span>` : ''}
+        <span class="gh-stars"><i class="fas fa-star"></i>${repo.stargazers_count}</span>
+        <span class="gh-updated">${relTime(repo.updated_at)}</span>
+      </div>`;
+        card.addEventListener('mouseenter', onHover);
+        card.addEventListener('click', () => SE.navClick());
+        return card;
+    }
+
+    function renderRepos(repos) {
+        ghGrid.innerHTML = '';
+        const list = repos.filter(r => !r.fork).slice(0, 12);
+        if (!list.length) {
+            ghGrid.innerHTML = '<p class="gh-empty">No public repositories found.</p>';
+            return;
+        }
+        list.forEach((repo, i) => {
+            const card = buildRepoCard(repo);
+            card.classList.add(`reveal-d${(i % 4) + 1}`);
+            ghGrid.appendChild(card);
+            revealObserver.observe(card);
+        });
+        if (ghStatus) ghStatus.textContent = `${list.length} REPOSITORIES`;
+        if (ghDot) ghDot.classList.remove('error');
+    }
+
+    async function fetchRepos() {
+        // Try cache
+        try {
+            const cached = localStorage.getItem(GH_CACHE_KEY);
+            if (cached) {
+                const { timestamp, data } = JSON.parse(cached);
+                if (Date.now() - timestamp < CACHE_TTL) {
+                    renderRepos(data);
+                    const age = Math.round((Date.now() - timestamp) / 60000);
+                    if (ghCacheTime) ghCacheTime.textContent = `CACHED ${age}MIN AGO`;
+                    return;
                 }
             }
+        } catch (_) { }
+
+        // Live fetch
+        try {
+            if (ghStatus) ghStatus.textContent = 'CONNECTING TO GITHUB…';
+            const res = await fetch(GH_API_REPOS, {
+                headers: { Accept: 'application/vnd.github+json' },
+            });
+            if (!res.ok) throw new Error(res.status);
+            const data = await res.json();
+            localStorage.setItem(GH_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data }));
+            renderRepos(data);
+            if (ghCacheTime) ghCacheTime.textContent = 'LIVE — REFRESHES DAILY';
+        } catch (err) {
+            console.warn('[GH repos]', err);
+            if (ghStatus) ghStatus.textContent = 'GITHUB UNAVAILABLE';
+            if (ghDot) ghDot.classList.add('error');
+            if (ghGrid) ghGrid.innerHTML = '<p class="gh-empty">Repositories will appear when network is available.</p>';
         }
     }
 
-    function animateParticles() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        hueShift = (hueShift + 0.05) % 360; // Very slow color drift
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
-        drawConnections();
-        animationId = requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
-
-    // ===== TILT EFFECT ON CARDS =====
-    document.querySelectorAll('[data-tilt]').forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / centerY * -4;
-            const rotateY = (x - centerX) / centerX * 4;
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-        });
-    });
-
-    // ===== FADE-IN-UP ANIMATION KEYFRAMES =====
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    `;
-    document.head.appendChild(style);
-
-    // ===== SMOOTH SECTION SCROLL =====
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = document.querySelector(anchor.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
+    fetchRepos();
 
 });
